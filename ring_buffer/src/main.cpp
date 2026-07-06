@@ -1,20 +1,31 @@
 #include "RingBuffer.hpp"
+#include "Logger.hpp"
 
 #include <iostream>
 
 int main()
 {
-    RingBuffer rb(4);
+    /* RingBuffer task check */
+    // RingBuffer rb(4);
 
-    rb.push(10);
-    rb.push(20);
-    rb.push(30);
+    // rb.push(10);
+    // rb.push(20);
+    // rb.push(30);
 
-    std::uint8_t value{};
+    // std::uint8_t value{};
 
-    while(rb.pop(value)) {
-        std::cout << static_cast<int>(value) << '\n';
-    }
+    // while(rb.pop(value)) {
+    //     std::cout << static_cast<int>(value) << '\n';
+    // }
+
+    /* Logger task check  */
+    Logger logger(128);
+
+    logger.log("ECU simulator started");
+    logger.log("Speed sensor task initiated");
+    logger.log("Diag task initiated");
+
+    logger.flush();
 
     return 0;
 }
