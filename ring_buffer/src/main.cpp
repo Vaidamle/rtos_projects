@@ -12,6 +12,8 @@ int main()
     // rb.push(20);
     // rb.push(30);
 
+    // //std::cout << "Free space after push: " << static_cast<int>(rb.freespace()) << '\n';
+
     // std::uint8_t value{};
 
     // while(rb.pop(value)) {

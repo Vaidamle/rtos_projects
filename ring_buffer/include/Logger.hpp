@@ -1,3 +1,7 @@
+/* Logger.hpp
+APIs declaration for Logger module 
+    - Log and flush messages from Ring Buffer
+*/
 #pragma once
 
 #include "RingBuffer.hpp"
