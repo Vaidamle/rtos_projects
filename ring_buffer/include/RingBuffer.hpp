@@ -26,6 +26,6 @@ class RingBuffer {
     std::vector<std::uint8_t> buffer_;
     std::size_t head_{0};                   // next write position
     std::size_t tail_{0};                   // next read position
-    std::size_t count_{0};                   // # of elements present
+    std::size_t size_{0};                   // # of elements present
 
 };

@@ -1,6 +1,5 @@
 /* RingBuffer.cpp
 APIs definition for RingBuffer module 
-    - Log and flush messages from Ring Buffer
 */
 #include "RingBuffer.hpp"
 
@@ -23,7 +22,7 @@ bool RingBuffer::push(std::uint8_t byte)
 
     buffer_[head_] = byte;
     head_ = (head_ + 1) % buffer_.size();
-    ++count_;
+    ++size_;
 
     return true;
 }
@@ -37,11 +36,9 @@ bool RingBuffer::push(const std::uint8_t* data, std::size_t length)
     }  
 
     // push whole data stream into buffer byte-by-byte
-    for (std::size_t i = 0 ; i < length; i++)
+    for (std::size_t i = 0 ; i < length; ++i)
     {
-        buffer_[head_] = data[i];
-        head_ = (head_ + 1) % buffer_.size();
-        ++count_;
+        push(data[i]);
     }
 
     return true;
@@ -56,23 +53,23 @@ bool RingBuffer::pop(std::uint8_t& byte)
 
     byte = buffer_[tail_];
     tail_ = (tail_ + 1) % buffer_.size();
-    --count_;
+    --size_;
 
     return true;
 }
 
 bool RingBuffer::isFull() const
 {
-    return count_ == buffer_.size();
+    return size_ == buffer_.size();
 }
 
 bool RingBuffer::isEmpty() const{
-    return count_ == 0;
+    return size_ == 0;
 }
 
 std::size_t RingBuffer::size() const
 {
-    return count_;
+    return size_;
 }
 
 std::size_t RingBuffer::capacity() const
@@ -82,6 +79,6 @@ std::size_t RingBuffer::capacity() const
 
 std::size_t RingBuffer::freeSpace() const
 {
-    return (buffer_.size() - count_);
+    return (buffer_.size() - size_);
 }
 
