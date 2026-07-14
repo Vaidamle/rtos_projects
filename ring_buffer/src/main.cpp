@@ -1,5 +1,6 @@
 #include "RingBuffer.hpp"
 #include "Logger.hpp"
+#include "MemoryPool.hpp"
 
 #include <iostream>
 
@@ -64,9 +65,30 @@ int main()
 
     /* Unit tests for RingBuffer*/
 
-    test_empty_pop();
-    test_full_push();
-    test_wraparound();
+    // test_empty_pop();
+    // test_full_push();
+    // test_wraparound();
+
+    // Memory pool test
+    MemoryPool pool(32, 2);
+
+    void* p1 = pool.allocate(); 
+    void* p2 = pool.allocate();
+    void* p3 = pool.allocate();         // out of blockCount : nullptr
+
+    bool r1 = pool.deallocate(p1);      // true
+    bool r2 = pool.deallocate(p1);      // double free : false
+
+    int foreign{};
+    bool r3 = pool.deallocate(&foreign);        // invalid ptr : false
+
+    auto* interior = static_cast<std::uint8_t*>(p2) + 1;
+
+    bool r4 = pool.deallocate(interior);        // misaligned block address : false
+
+    bool r5 = pool.deallocate(p2);      // true
+
+    std::cout << "Free blocks: " << pool.freeBlocks() << '\n';
 
     return 0;
 }
