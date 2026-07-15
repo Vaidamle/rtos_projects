@@ -11,6 +11,7 @@ add_executable(ring_buffer
     src/RingBuffer.cpp
     src/Logger.cpp
     src/MemoryPool.cpp
+    src/MessageQueue.cpp
 )
 
 target_include_directories(ring_buffer
