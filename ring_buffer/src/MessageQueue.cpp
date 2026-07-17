@@ -7,6 +7,14 @@ APIs definition for MessageQueue module
 #include <limits>
 #include <cstring>
 
+/* MessageQueue::constructor()
+    reject capacity == 0
+    reject maxMessageSize == 0
+    check multiplication overflow for capacity * maxMessageSize
+    allocate capacity * maxMessageSize bytes in storage_
+    allocate capacity entries in messageLengths_
+    leave head_, tail_, and count_ at zero
+*/
 MessageQueue::MessageQueue (std::size_t capacity, std::size_t maxMessageSize) :
     capacity_(capacity), maxMessageSize_(maxMessageSize)
 {
@@ -31,6 +39,8 @@ MessageQueue::MessageQueue (std::size_t capacity, std::size_t maxMessageSize) :
     messageLengths_.resize(capacity_);
 
 }
+
+/* Helper APIs*/
 
 bool MessageQueue::isEmpty() const
 {
@@ -65,6 +75,15 @@ const std::uint8_t* MessageQueue::slotAddress(std::size_t index) const{
     return storage_.data() + index * maxMessageSize_;
 }
 
+/* MessageQueue::send()
+    Input validation checks
+    calculate destination slot
+    copy message bytes
+    store message length
+    advance tail
+    increment count
+    return true
+*/
 bool MessageQueue::send(const void* data, std::size_t length)
 {
     /* Input validation checks*/
@@ -94,6 +113,15 @@ bool MessageQueue::send(const void* data, std::size_t length)
 
 }
 
+/* MessageQueue::Receive()
+    Read the message length at head_.
+    Find the current head slot.
+    Copy exactly that many bytes.
+    Write the copied length into receivedLength.
+    Advance head_ with wraparound.
+    Decrement count_.
+    Return true.
+*/
 bool MessageQueue::receive (void* destination, std::size_t destinationSize, std::size_t& receivedLength)
 {
     /* Input validation checks*/
